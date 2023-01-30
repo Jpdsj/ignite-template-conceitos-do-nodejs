@@ -1,0 +1,31 @@
+curl --location --request POST 'localhost:3333/users' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name" : "Name",
+    "username" : "Username"
+}'
+
+curl --location --request GET 'localhost:3333/todos' \
+--header 'username: Username'
+
+curl --location --request POST 'localhost:3333/todos' \
+--header 'username: Username' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "title": "Tarefa 1",
+    "deadline": "2023-01-31"
+}'
+
+curl --location --request PUT 'localhost:3333/todos/0321453f-64cf-4fb5-b59c-f00c8555ce8a' \
+--header 'username: Username' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "title": "Tarefa 1",
+    "deadline": "2023-12-26"
+}'
+
+curl --location --request PATCH 'localhost:3333/todos/0321453f-64cf-4fb5-b59c-f00c8555ce8a/done' \
+--header 'username: Username'
+
+curl --location --request DELETE 'localhost:3333/todos/e5589983-5d16-4af8-bbe9-3232be2a3778' \
+--header 'username: Username'
