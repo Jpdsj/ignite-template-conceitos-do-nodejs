@@ -93,6 +93,11 @@ app.put(
     const { id } = request.params;
 
     const todos = user.todos.find((todo) => todo.id === id);
+
+    if (!todos) {
+      return response.status(404).json({ error: "Todo not exists" });
+    }
+
     todos.deadline = new Date(deadline);
     todos.title = title;
     return response
@@ -106,6 +111,11 @@ app.patch("/todos/:id/done", checksExistsUserAccount, (request, response) => {
   const { id } = request.params;
 
   const todos = user.todos.find((todo) => todo.id === id);
+
+  if (!todos) {
+    return response.status(404).json({ error: "Todo not exists" });
+  }
+
   todos.done = true;
   return response
     .status(200)
@@ -114,15 +124,16 @@ app.patch("/todos/:id/done", checksExistsUserAccount, (request, response) => {
 
 app.delete("/todos/:id", checksExistsUserAccount, (request, response) => {
   const { user } = request;
+  const { id } = request.params;
 
-  if (!user) {
-    return response
-      .status(404)
-      .json({ message: `User not exists to be erased.` });
+  const todoIndex = user.todos.findIndex((todo) => todo.id === id);
+
+  if (todoIndex === -1) {
+    return response.status(404).json({ error: "Todo not found" });
   }
 
-  users.splice(user, 1);
-  return response.status(200).json({ message: `User ${user.name} deleted!` });
+  user.todos.splice(todoIndex, 1);
+  return response.status(204).json({ message: `User ${user.name} deleted!` });
 });
 
 module.exports = app;
